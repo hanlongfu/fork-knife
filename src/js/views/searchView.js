@@ -103,7 +103,7 @@ const renderButtons = (page, numResults, resPerPage) => {
 
 //render recipe search results including pagination on UI
 //set the default position as page 1, each page has 10 results
-export const renderResults = (recipes, page = 2, resPerPage = 10) => {
+export const renderResults = (recipes, page = 1, resPerPage = 10) => {
 	//render results of current page
 	//set the starting and ending point
 	const start = (page - 1) * resPerPage;

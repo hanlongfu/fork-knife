@@ -44,8 +44,8 @@ elements.searchForm.addEventListener("submit", (e) => {
 });
 
 //event listener to click event on pagination button
+//using event delegation
 elements.searchResPages.addEventListener("click", (e) => {
-	//we are only interested in the class 'btn-inline'
 	//no matter where I click, we only get '.btn-inline'
 	//because we want to use 'data-goto' property
 	const btn = e.target.closest(".btn-inline");
