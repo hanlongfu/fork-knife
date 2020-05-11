@@ -18,7 +18,11 @@ const controlSearch = async () => {
 		// new instance based on Search class
 		state.search = new Search(query);
 
-		// 3) Prepare UI for results
+    // 3) Prepare UI for results
+    //clear input field
+    searchView.clearInput();
+    //clear recipe results to make space for new results
+		searchView.clearResults();
 
 		// 4) Search for recipes
 		await state.search.getResults();
