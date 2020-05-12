@@ -68,10 +68,12 @@ elements.searchResPages.addEventListener("click", (e) => {
 const controlRecipe = async () => {
 	//this gets the hash of the url
 	const id = window.location.hash.replace("#", "");
-	console.log(id);
+	//console.log(id);
 
 	if (id) {
 		// prepare UI for changes
+		recipeView.clearRecipe(); // clear existing recipe
+		renderLoader(elements.recipe); //renderLoader(parentElement)
 
 		// create new instance object of Recipe class
 		// set it as the recipe property of the state object
@@ -87,7 +89,8 @@ const controlRecipe = async () => {
 			state.recipe.calcServings();
 
 			// render recipe
-			console.log(state.recipe);
+			clearLoader();
+			recipeView.renderRecipe(state.recipe);
 		} catch (e) {
 			alert("Error processing recipe!");
 		}

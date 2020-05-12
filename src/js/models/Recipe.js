@@ -45,8 +45,27 @@ export default class Recipe {
 			"teaspoon",
 			"cups",
 			"pounds",
+			"pound",
+			"kilograms",
+			"kilogram",
+			"grams",
+			"gram",
 		];
-		const unitShort = ["tbsp", "tbsp", "oz", "oz", "tsp", "tsp", "cup", "lb"];
+		const unitShort = [
+			"tbsp",
+			"tbsp",
+			"oz",
+			"oz",
+			"tsp",
+			"tsp",
+			"cup",
+			"lb",
+			"lb",
+			"kg",
+			"kg",
+			"g",
+			"g",
+		];
 		const newIngredients = this.ingredients.map((e) => {
 			//1) uniform units
 			let ingredient = e.toLowerCase();
@@ -102,7 +121,7 @@ export default class Recipe {
 				// 3.3.3) there is no unit and no number
 			} else if (unitIndex === -1) {
 				objIng = {
-					count: 1,
+					count: "",
 					unit: "",
 					ingredient: ingredient,
 				};
