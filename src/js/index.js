@@ -1,4 +1,5 @@
 import Search from "./models/Search";
+import Recipe from "./models/Recipe";
 import * as searchView from "./views/searchView";
 import { elements, renderLoader, clearLoader } from "./views/base";
 //global state of the app (a.k.a. central warehouse)
@@ -8,10 +9,14 @@ import { elements, renderLoader, clearLoader } from "./views/base";
 // - liked recipes
 const state = {};
 
+/*---------SEARCH CONTROLLER-----------*/
 // action when user click on "search"
 const controlSearch = async () => {
 	// 1) get query from view
-	const query = searchView.getInput();
+	//const query = searchView.getInput();
+
+	//testing
+	const query = "pizza";
 
 	if (query) {
 		// 2) New search object and add to state
@@ -25,19 +30,30 @@ const controlSearch = async () => {
 		searchView.clearResults();
 		//render loader
 		renderLoader(elements.searchRes);
+		try {
+			// 4) Search for recipes
+			await state.search.getResults();
 
-		// 4) Search for recipes
-		await state.search.getResults();
-
-		// 5) render results on UI
-		//clear loader
-		clearLoader();
-		searchView.renderResults(state.search.result);
+			// 5) render results on UI
+			//clear loader
+			clearLoader();
+			searchView.renderResults(state.search.result);
+		} catch (e) {
+			alert("Something wrong with the search...");
+			clearLoader();
+		}
 	}
 };
 
 //When users click on "search"
 elements.searchForm.addEventListener("submit", (e) => {
+	// stops default reloading when search is clicked
+	e.preventDefault();
+	controlSearch();
+});
+
+//Testing
+window.addEventListener("load", (e) => {
 	// stops default reloading when search is clicked
 	e.preventDefault();
 	controlSearch();
@@ -56,3 +72,42 @@ elements.searchResPages.addEventListener("click", (e) => {
 		searchView.renderResults(state.search.result, goToPage);
 	}
 });
+
+/*---------RECIPE CONTROLLER-----------*/
+const controlRecipe = async () => {
+	//this gets the hash of the url
+	const id = window.location.hash.replace("#", "");
+	console.log(id);
+
+	if (id) {
+		// prepare UI for changes
+
+		// create new instance object of Recipe class
+		// set it as the recipe property of the state object
+		state.recipe = new Recipe(id);
+
+		//Testing
+		window.r = state.recipe;
+
+		try {
+			// get recipe data
+			await state.recipe.getRecipe();
+
+			// calculate servings and time
+			state.recipe.calcTime();
+			state.recipe.calcServings();
+
+			// render recipe
+			console.log(state.recipe);
+		} catch (e) {
+			alert("Error processing recipe!");
+		}
+	}
+};
+
+//listen to event triggerd by hash change
+// window.addEventListener('hashchange', controlRecipe);
+// window.addEventListener('load', controlRecipe);
+["hashchange", "load"].forEach((event) =>
+	window.addEventListener(event, controlRecipe)
+);
