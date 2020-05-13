@@ -8,6 +8,17 @@ export const clearInput = () => {
 	elements.searchInput.value = "";
 };
 
+//highlight selected search recipe item
+export const highlightSelected = (id) => {
+	//select search items and turn them into array
+	const resultsArr = Array.from(document.querySelectorAll(".results__link"));
+	//remove highlight from already selected item
+	resultsArr.forEach((el) => el.classList.remove("results__link--active"));
+	document
+		.querySelector(`a[href="#${id}"]`)
+		.classList.add("results__link--active");
+};
+
 //clear results (including pagination button) to make space for new results
 export const clearResults = () => {
 	elements.searchResList.innerHTML = "";

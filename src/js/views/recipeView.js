@@ -5,12 +5,39 @@ export const clearRecipe = () => {
 	elements.recipe.innerHTML = "";
 };
 
+//format decimals back to ratios 1.25  to 1 1/4
+const formatCount = (count) => {
+	if (count) {
+		// count  2.5  -> 2 1/2
+		// count .5 -> 1/2
+		const [int, dec] = count
+			.toString()
+			.split(".")
+			.map((el) => parseInt(el, 10));
+
+		// no decimals, return count
+		if (!dec) return count;
+
+		// for 0.5, integer = 0
+		if (int === 0) {
+			const frac = new Fraction(count);
+			//0.5 -> 1/2
+			return `${frac.numerator}/${frac.denominator}`;
+		} else {
+			// (count - int) represents the decimal portion
+			const frac = new Fraction(count - int);
+			return `${int} ${frac.numerator}/${frac.denominator}`;
+		}
+	}
+	return "?";
+};
+
 const createIngredient = (ingredient) => `
   <li class="recipe__item">
     <svg class="recipe__icon">
         <use href="img/icons.svg#icon-check"></use>
     </svg>
-    <div class="recipe__count">${ingredient.count}</div>
+    <div class="recipe__count">${formatCount(ingredient.count)}</div>
     <div class="recipe__ingredient">
         <span class="recipe__unit">${ingredient.unit}</span>
         ${ingredient.ingredient}
