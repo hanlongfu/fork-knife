@@ -27,7 +27,7 @@ export const clearResults = () => {
 };
 
 // limit the reciple title to 17 characters
-const limitRecipeTitle = (title, limit = 17) => {
+export const limitRecipeTitle = (title, limit = 17) => {
 	//create an empty array to hold the new title
 	const newTitle = [];
 	if (title.length > limit) {
