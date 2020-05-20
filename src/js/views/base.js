@@ -18,6 +18,7 @@ export const elementStrings = {
 
 // render loader that can be reused for loading results (in 2 different places)
 export const renderLoader = (parent) => {
+	//loader markup
 	const loader = `
 		<div class="${elementStrings.loader}">
 			<svg>

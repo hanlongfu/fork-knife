@@ -9,24 +9,29 @@ import * as likesView from "./views/likesView";
 import { elements, renderLoader, clearLoader } from "./views/base";
 
 //global state of the app (a.k.a. central warehouse)
+// the state objec contains the following
 // - Search object
 // - Current recipe object
 // - Shopping list object
 // - liked recipes
+
+// react and redux are used to manage state
 const state = {};
-window.state = state;
 
 /*---------SEARCH CONTROLLER-----------*/
-// action when user click on "search"
+// what happens when user click on "search"
+// for testing
+window.search = state;
 const controlSearch = async () => {
-	// 1) get query from view
+	
+	// 1) get query from the View
 	const query = searchView.getInput();
-
+	//only if query exists
 	if (query) {
 		// 2) New search object and add to state
 		// new instance based on Search class
+		// stored as property of state object
 		state.search = new Search(query);
-
 		// 3) Prepare UI for results
 		//clear input field
 		searchView.clearInput();
@@ -37,10 +42,10 @@ const controlSearch = async () => {
 		try {
 			// 4) Search for recipes
 			await state.search.getResults();
-
 			// 5) render results on UI
-			//clear loader
+			 // 5.1) clear loader first
 			clearLoader();
+			 // 5.2) render results
 			searchView.renderResults(state.search.result);
 		} catch (e) {
 			alert("Something wrong with the search...");
