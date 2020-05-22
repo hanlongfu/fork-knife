@@ -32,6 +32,7 @@ const controlSearch = async () => {
 		// new instance based on Search class
 		// stored as property of state object
 		state.search = new Search(query);
+		
 		// 3) Prepare UI for results
 		//clear input field
 		searchView.clearInput();
@@ -40,8 +41,10 @@ const controlSearch = async () => {
 		//render loader
 		renderLoader(elements.searchRes);
 		try {
+			
 			// 4) Search for recipes
 			await state.search.getResults();
+		
 			// 5) render results on UI
 			 // 5.1) clear loader first
 			clearLoader();
