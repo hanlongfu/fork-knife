@@ -28,6 +28,25 @@ const clearInput = () => {
 const clearResults = () => {
 	document.querySelector("results__list").innerHTML = "";
 };
+
+// limit title to 17 characters
+const limitRecipeTitle = (title, limit = 17) => {
+	const newTitle = [];
+	if (title.length > limit) {
+		title.split(" ").reduce((acc, curr) => {
+			if (acc + curr.length <= limit) {
+				newTitle.push(curr);
+			}
+			//update the accumulator
+			return acc + curr.length;
+		}, 0);
+
+		//return the result
+		return `${newTitle.join(" ")}...`;
+	}
+	return title;
+};
+
 const renderRecipe = (recipe) => {
 	const markeup = `
 		<li>
