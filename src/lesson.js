@@ -22,6 +22,12 @@ class Search {
 	SEARCH VIEW
 */
 const getInput = () => document.querySelector(".search__field").value;
+const clearInput = () => {
+	document.querySelector(".search__field").value = "";
+};
+const clearResults = () => {
+	document.querySelector("results__list").innerHTML = "";
+};
 const renderRecipe = (recipe) => {
 	const markeup = `
 		<li>
@@ -58,6 +64,8 @@ const controlSearch = async () => {
 		// store search query as a property of state
 		state.search = new Search(query);
 		// prepare UI for results
+		clearInput();
+		clearResults();
 		// search for recipes
 		await state.search.getResults();
 		// render results on UI
