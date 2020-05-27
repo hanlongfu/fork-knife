@@ -1,7 +1,7 @@
 import axios from "axios";
-/*
+/*********************************** 
   SEARCH MODEL
-*/
+***********************************/
 class Search {
 	constructor(query) {
 		this.query = query;
@@ -18,9 +18,9 @@ class Search {
 	}
 }
 
-/*
+/********************************** 
 	SEARCH VIEW
-*/
+***********************************/
 const getInput = () => document.querySelector(".search__field").value;
 const clearInput = () => {
 	document.querySelector(".search__field").value = "";
@@ -50,12 +50,12 @@ const limitRecipeTitle = (title, limit = 17) => {
 const renderRecipe = (recipe) => {
 	const markeup = `
 		<li>
-			<a class="results__link results__link--active" href="${recipe.recipe_ida}">
+			<a class="results__link results__link--active" href="${recipe.recipe_id}">
 					<figure class="results__fig">
-							<img src="${recipe.image_url}" alt="Test">
+							<img src="${recipe.image_url}" alt=${limitRecipleTitle(recipe.title)}>
 					</figure>
 					<div class="results__data">
-							<h4 class="results__name">${recipe.title}</h4>
+							<h4 class="results__name">${limitRecipleTitle(recipe.title)}</h4>
 							<p class="results__author">${recipe.publisher}</p>
 					</div>
 			</a>
@@ -70,9 +70,27 @@ const renderResults = (recipes) => {
 	recipes.forEach(renderRecipe);
 };
 
-/*
+const renderLoader = (parent) => {
+	//loader markup
+	const loader = `
+		<div class='loader'>
+			<svg>	
+				<use href="img/icons.svg#icon-cw"></use>
+			</svg>
+		</div>
+	`;
+	parent.insertAdjacentHTML("afterbegin", loader);
+};
+
+const clearLoader = () => {
+	const loader = document.querySelector('.loader');
+	//if there is a loader, remove the loader;
+	if(loader) loader.parentElement.removeChild(loader);
+};
+
+/********************************** 
   Global Controller
-*/
+***********************************/
 // initiate a state object to store everything
 const state = {};
 const controlSearch = async () => {
@@ -80,14 +98,16 @@ const controlSearch = async () => {
 	const query = getInput();
 	// console.log(query);
 	if (query) {
-		// store search query as a property of state
+		// 2) store search query as a property of state
 		state.search = new Search(query);
-		// prepare UI for results
+		// 3) prepare UI for results
 		clearInput();
 		clearResults();
-		// search for recipes
+    renderLoader(document.querySelector('.results'));
+		// 4) search for recipes
 		await state.search.getResults();
-		// render results on UI
+
+		// 5) render results on UI
 		renderResults(state.search.result);
 	}
 };
