@@ -29,6 +29,7 @@ const clearResults = () => {
 	document.querySelector("results__list").innerHTML = "";
 };
 
+/* --------- Recipe Results ----------*/
 // limit title to 17 characters
 const limitRecipeTitle = (title, limit = 17) => {
 	const newTitle = [];
@@ -47,6 +48,7 @@ const limitRecipeTitle = (title, limit = 17) => {
 	return title;
 };
 
+// Recipe is individual recipe item
 const renderRecipe = (recipe) => {
 	const markeup = `
 		<li>
@@ -66,10 +68,17 @@ const renderRecipe = (recipe) => {
 		.insertAdjacentHTML("beforeend", markup);
 };
 
-const renderResults = (recipes) => {
-	recipes.forEach(renderRecipe);
+// Results are the aggregate
+// page is defaulted to first page, results per page are defaulted to 10 per page
+const renderResults = (recipes, page = 1, resPerPage = 10) => {
+	const start = (page - 1) * resPerPage;
+	const end = page * resPerPage;
+
+	//slice off the first ten items (0 - 9)
+	recipes.slice(start, end).forEach(renderRecipe);
 };
 
+/* --------- Loader ----------*/
 const renderLoader = (parent) => {
 	//loader markup
 	const loader = `
@@ -81,11 +90,10 @@ const renderLoader = (parent) => {
 	`;
 	parent.insertAdjacentHTML("afterbegin", loader);
 };
-
 const clearLoader = () => {
-	const loader = document.querySelector('.loader');
+	const loader = document.querySelector(".loader");
 	//if there is a loader, remove the loader;
-	if(loader) loader.parentElement.removeChild(loader);
+	if (loader) loader.parentElement.removeChild(loader);
 };
 
 /********************************** 
@@ -103,11 +111,12 @@ const controlSearch = async () => {
 		// 3) prepare UI for results
 		clearInput();
 		clearResults();
-    renderLoader(document.querySelector('.results'));
+		renderLoader(document.querySelector(".results"));
 		// 4) search for recipes
 		await state.search.getResults();
 
 		// 5) render results on UI
+		clearLoader(); // clear loader as soon as results come back
 		renderResults(state.search.result);
 	}
 };
