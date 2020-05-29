@@ -68,6 +68,38 @@ const renderRecipe = (recipe) => {
 		.insertAdjacentHTML("beforeend", markup);
 };
 
+/* --------- Pagination buttons ----------*/
+//create the button markup
+//
+const createButton = (page, type) => `
+	<button class="btn-inline results__btn--prev">
+		<svg class="search__icon">
+				<use href="img/icons.svg#icon-triangle-left"></use>
+		</svg>
+		<span>Page ${type === "prev" ? page - 1 : page + 1} </span>
+	</button>
+	<button class="btn-inline results__btn--next">
+		<span>Page 3</span>
+		<svg class="search__icon">
+				<use href="img/icons.svg#icon-triangle-right"></use>
+		</svg>
+	</button>
+`;
+
+const renderButtons = (page, numResults, resPerPage) => {
+	//round up to the ceiling
+	const pages = Math.ceil(numResults / resPerPage);
+
+	//calculate the button position
+	if (page === 1 && pages > 1) {
+		//button to go to next page if on the first page
+	} else if (page < pages) {
+		//prev and next button if in the middle
+	} else if (page === pages && pages > 1) {
+		//button to go to prev page if on the last page
+	}
+};
+
 // Results are the aggregate
 // page is defaulted to first page, results per page are defaulted to 10 per page
 const renderResults = (recipes, page = 1, resPerPage = 10) => {
