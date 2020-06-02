@@ -70,19 +70,17 @@ const renderRecipe = (recipe) => {
 
 /* --------- Pagination buttons ----------*/
 //create the button markup
-//
+// type：prev, next
 const createButton = (page, type) => `
-	<button class="btn-inline results__btn--prev">
+	<button class="btn-inline results__btn--${type}" data-goto=${
+	type === "prev" ? page - 1 : page + 1
+} >
 		<svg class="search__icon">
-				<use href="img/icons.svg#icon-triangle-left"></use>
+				<use href="img/icons.svg#icon-triangle-${
+					type === "prev" ? "left" : "right"
+				}"></use>
 		</svg>
 		<span>Page ${type === "prev" ? page - 1 : page + 1} </span>
-	</button>
-	<button class="btn-inline results__btn--next">
-		<span>Page 3</span>
-		<svg class="search__icon">
-				<use href="img/icons.svg#icon-triangle-right"></use>
-		</svg>
 	</button>
 `;
 
@@ -90,14 +88,24 @@ const renderButtons = (page, numResults, resPerPage) => {
 	//round up to the ceiling
 	const pages = Math.ceil(numResults / resPerPage);
 
+	let button;
 	//calculate the button position
 	if (page === 1 && pages > 1) {
 		//button to go to next page if on the first page
+		button = createButton(page, "next");
 	} else if (page < pages) {
 		//prev and next button if in the middle
+		button = `
+		 ${createButton(page, "prev")}
+		 ${createButton(page, "next")}
+		`;
 	} else if (page === pages && pages > 1) {
 		//button to go to prev page if on the last page
+		button = createButton(page, "prev");
 	}
+	document
+		.querySelector(".results__pages")
+		.insertAdjacentHTML("afterbegin", button);
 };
 
 // Results are the aggregate
