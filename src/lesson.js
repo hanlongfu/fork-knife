@@ -116,6 +116,9 @@ const renderResults = (recipes, page = 1, resPerPage = 10) => {
 
 	//slice off the first ten items (0 - 9)
 	recipes.slice(start, end).forEach(renderRecipe);
+
+	//render pagination buttons
+	renderButtons(page, recipes.length, resPerPage);
 };
 
 /* --------- Loader ----------*/
@@ -164,4 +167,16 @@ const controlSearch = async () => {
 document.querySelector(".search").addEventListener("submit", (e) => {
 	e.preventDefault();
 	e.controlSearch();
+});
+
+document.querySelector("results__pages").addEventListener("click", (e) => {
+	// use event delegation
+	// closest returns the closest ancestor of the current element which matches
+	// the selectors given in parameter
+	const btn = e.target.closest(".btn-inline");
+	if (btn) {
+		let goToPage = parseInt(btn.dataset.goto, 10);
+		clearResults();
+		renderResults(state.search.result, goToPage);
+	}
 });
