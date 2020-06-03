@@ -18,6 +18,37 @@ class Search {
 	}
 }
 
+class Recipe {
+	constructor(id) {
+		this.id = id;
+	}
+	async getRecipe() {
+		try {
+			const res = await axios(
+				`https://forkify-api.herokuapp.com/api/get?rId=${this.id}`
+			);
+			this.title = res.data.recipe.title;
+			this.author = res.data.recipe.publisher;
+			this.img = res.data.recipe.img_url;
+			this.url = res.data.recipe.source_url;
+			this.ingredients = res.data.recipe.ingredients;
+		} catch (error) {
+			console.log(error);
+			alert("something went wrong!");
+		}
+	}
+
+	calcTime() {
+		const numImg = this.ingredients.length;
+		const periods = Math.ceil(numImg / 3);
+		this.time = periods * 15;
+	}
+
+	calcServings() {
+		this.servings = 4;
+	}
+}
+
 /********************************** 
 	SEARCH VIEW
 ***********************************/
@@ -27,6 +58,7 @@ const clearInput = () => {
 };
 const clearResults = () => {
 	document.querySelector("results__list").innerHTML = "";
+	document.querySelector(".results__pages").innerHTML = "";
 };
 
 /* --------- Recipe Results ----------*/
@@ -140,6 +172,30 @@ const clearLoader = () => {
 };
 
 /********************************** 
+  Recipe Controller
+***********************************/
+const controlRecipe = async () => {
+	// get ID from url
+	const id = window.location.hash.replace("#", "");
+
+	if (id) {
+		// prepare UI for changes
+		// create new recipe object
+		state.recipe = new Recipe(id);
+		// get recipe data
+		await state.recipe.getRecipe();
+		// calculate servings and time
+		state.recipe.calcTime();
+		state.recipe.calcTime();
+		// render recipe
+		console.log(state.recipe);
+	}
+};
+
+//hash change event
+window.addEventListener("hashchange", controlRecipe);
+
+/********************************** 
   Global Controller
 ***********************************/
 // initiate a state object to store everything
@@ -169,7 +225,7 @@ document.querySelector(".search").addEventListener("submit", (e) => {
 	e.controlSearch();
 });
 
-document.querySelector("results__pages").addEventListener("click", (e) => {
+document.querySelector(".results__pages").addEventListener("click", (e) => {
 	// use event delegation
 	// closest returns the closest ancestor of the current element which matches
 	// the selectors given in parameter
